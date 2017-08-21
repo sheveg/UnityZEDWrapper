@@ -12,6 +12,7 @@ static sl::Camera zed;
 static sl::SpatialMappingParameters spatial_mapping_params2;
 static sl::MeshFilterParameters filter_params;
 static sl::TRACKING_STATE tracking_state;
+static sl::Pose pose;
 
 bool mapping_is_started = false;
 
@@ -93,7 +94,7 @@ extern "C"
 
 	sl::ERROR_CODE mappingLoop()
 	{
-		volatile sl::ERROR_CODE err = sl::ERROR_CODE::ERROR_CODE_FAILURE;
+		sl::ERROR_CODE err = sl::ERROR_CODE::ERROR_CODE_FAILURE;
 		if (mapping_is_started)
 		{
 			if ((err = zed.grab()) == sl::SUCCESS)
@@ -104,7 +105,7 @@ extern "C"
 					zed.requestMeshAsync();					
 				}
 				else return err;
-				
+				zed.getPosition(pose);
 			}
 			else return err;
 		}
@@ -120,7 +121,7 @@ extern "C"
 
 	int getMeshSize()
 	{
-		return vertices.size() > 0 ? vertices.size() : -1;
+		return mesh.vertices.size() > 0 ? mesh.vertices.size() : -1;
 	}
 
 	int getTrianglesSize() 
@@ -132,7 +133,7 @@ extern "C"
 	{
 		if (mesh.vertices.size() > 0) 
 		{
-			memcpy(vert, &(mesh.vertices[0]), size);
+			memcpy(vert, &(mesh.vertices[0]), sizeof(sl::float3) * size);
 			return true;
 		}
 		else return false;
@@ -142,7 +143,7 @@ extern "C"
 	{
 		if (mesh.normals.size() > 0)
 		{
-			memcpy(norm, &(mesh.normals[0]), size);
+			memcpy(norm, &(mesh.normals[0]), sizeof(sl::float3) * size);
 			return true;
 		}
 		else return false;
@@ -152,7 +153,7 @@ extern "C"
 	{
 		if (mesh.uv.size() > 0)
 		{
-			memcpy(uv, &(mesh.uv[0]), size);
+			memcpy(uv, &(mesh.uv[0]), sizeof(sl::float2) * size);
 			return true;
 		}
 		else return false;
@@ -162,7 +163,7 @@ extern "C"
 	{
 		if (mesh.triangles.size() > 0)
 		{
-			memcpy(triangles, &(mesh.triangles[0]), size);
+			memcpy(triangles, &(mesh.triangles[0]), sizeof(sl::uint3) * size);
 			return true;
 		}
 		else return false;
