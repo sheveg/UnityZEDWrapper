@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int loopTime = 5;
+int loopTime = 20;
 
 int main()
 {
