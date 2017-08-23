@@ -20,15 +20,12 @@ static sl::Mesh mesh;
 
 static sl::SPATIAL_MAPPING_STATE mapping_state;
 
-static std::vector<sl::float3> vertices;
-
 extern "C" 
 {
 	
 	int startSpatialMapping() 
 	{
 		mesh.clear();
-		vertices.clear();
 		// create initialization parameters
 		sl::InitParameters parameters;
 		parameters.depth_mode = sl::DEPTH_MODE_PERFORMANCE; // Use QUALITY depth mode to improve mapping results
@@ -40,6 +37,7 @@ extern "C"
 		spatial_mapping_params.range_meter.second = sl::SpatialMappingParameters::get(sl::SpatialMappingParameters::RANGE_MEDIUM);
 		spatial_mapping_params.resolution_meter = sl::SpatialMappingParameters::get(sl::SpatialMappingParameters::RESOLUTION_LOW);
 		spatial_mapping_params.save_texture = true;
+		spatial_mapping_params.keep_mesh_consistent = false;
 		// open zed camera
 		sl::ERROR_CODE err = zed.open();
 		if (err != sl::ERROR_CODE::SUCCESS) 
@@ -66,10 +64,7 @@ extern "C"
 		mapping_is_started = false;
 		// HOW TO GET TEXTURE	
 		zed.extractWholeMesh(mesh);
-
-		sl::MeshFilterParameters meshFilterParams;
-		meshFilterParams.set(sl::MeshFilterParameters::FILTER_HIGH);
-		mesh.filter(meshFilterParams);
+		mesh.filter(filter_params);
 		mesh.applyTexture();
 
 		zed.disableSpatialMapping();
@@ -81,9 +76,7 @@ extern "C"
 	{
 		mapping_is_started = false;
 		zed.extractWholeMesh(mesh);
-		sl::MeshFilterParameters meshFilterParams;
-		meshFilterParams.set(sl::MeshFilterParameters::FILTER_HIGH);
-		mesh.filter(meshFilterParams);
+		mesh.filter(filter_params);
 		mesh.applyTexture();
 		mesh.save("randomShit.obj");
 
@@ -99,17 +92,14 @@ extern "C"
 		{
 			if ((err = zed.grab()) == sl::SUCCESS)
 			{
+				zed.requestMeshAsync();
 				if ((err = zed.getMeshRequestStatusAsync()) == sl::SUCCESS) {
-					if((err = zed.retrieveMeshAsync(mesh)) == sl::SUCCESS)
-						vertices = mesh.vertices;
-					zed.requestMeshAsync();					
+					zed.retrieveMeshAsync(mesh);
 				}
-				else return err;
-				zed.getPosition(pose);
+				else return err;		
 			}
 			else return err;
 		}
-		
 		return err;
 	}
 

@@ -32,38 +32,38 @@ int main()
 
 	stopSpatialMappingAndSave();
 	cout << "Main loop done" << endl;
-	int verticesSize = getMeshSize();
-	sl::float3* vertices = new sl::float3[verticesSize];
-	sl::float3* normals = new sl::float3[verticesSize];
-	sl::float2* uvs = new sl::float2[verticesSize];
+	//int verticesSize = getMeshSize();
+	//sl::float3* vertices = new sl::float3[verticesSize];
+	//sl::float3* normals = new sl::float3[verticesSize];
+	//sl::float2* uvs = new sl::float2[verticesSize];
 
-	int trianglesSize = getTrianglesSize();
-	sl::uint3* triangles = new sl::uint3[trianglesSize];
+	//int trianglesSize = getTrianglesSize();
+	//sl::uint3* triangles = new sl::uint3[trianglesSize];
 
-	
+	//
 
-	getVertices(vertices, verticesSize);
-	getNormals(normals, verticesSize);
-	getUVs(uvs, verticesSize);
-	getTriangles(triangles, trianglesSize);
+	//getVertices(vertices, verticesSize);
+	//getNormals(normals, verticesSize);
+	//getUVs(uvs, verticesSize);
+	//getTriangles(triangles, trianglesSize);
 
-	sl::Mesh mesh;
-	mesh.vertices.resize(verticesSize);
-	mesh.normals.resize(verticesSize);
-	mesh.uv.resize(verticesSize);
-	mesh.triangles.resize(trianglesSize);
+	//sl::Mesh mesh;
+	//mesh.vertices.resize(verticesSize);
+	//mesh.normals.resize(verticesSize);
+	//mesh.uv.resize(verticesSize);
+	//mesh.triangles.resize(trianglesSize);
 
-	memcpy(&mesh.vertices[0], &vertices[0], sizeof(sl::float3) * verticesSize);
-	memcpy(&mesh.normals[0], &normals[0], sizeof(sl::float3) * verticesSize);
-	memcpy(&mesh.uv[0], &uvs[0], sizeof(sl::float2) * verticesSize);
-	memcpy(&mesh.triangles[0], &triangles[0], sizeof(sl::uint3) * trianglesSize);
+	//memcpy(&mesh.vertices[0], &vertices[0], sizeof(sl::float3) * verticesSize);
+	//memcpy(&mesh.normals[0], &normals[0], sizeof(sl::float3) * verticesSize);
+	//memcpy(&mesh.uv[0], &uvs[0], sizeof(sl::float2) * verticesSize);
+	//memcpy(&mesh.triangles[0], &triangles[0], sizeof(sl::uint3) * trianglesSize);
 
 	//mesh.vertices = vector<sl::float3>(vertices, vertices + sizeof(sl::float3) * verticesSize);
 	/*mesh.normals = vector<sl::float3>(normals, normals + sizeof(sl::float3) * verticesSize);
 	mesh.uv = vector<sl::float2>(uvs, uvs + sizeof(sl::float2) * verticesSize);
 	mesh.triangles = vector<sl::uint3>(triangles, triangles + sizeof(sl::uint3) * trianglesSize);*/
 
-	mesh.save("hackyObject.obj");
+	/*mesh.save("hackyObject.obj");*/
 
 	/*int width = getTextureWidth();
 	int height = getTextureHeight();
@@ -82,7 +82,7 @@ int main()
 
 	//deleteVerticesArray(vertices);
 	cout << "Done" << endl;
-	getchar();
+	//getchar();
 
 	//delete[] vertices;
 	//delete[] normals;
